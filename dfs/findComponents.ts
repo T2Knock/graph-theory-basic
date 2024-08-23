@@ -7,11 +7,14 @@ const graph: Record<string, string[]> = {
   F: ["E"],
 };
 const visited = new Set<string>();
+let count = 0;
+const components: Record<string, number> = {};
 
 function dfs(node: string) {
   if (visited.has(node)) return;
 
   visited.add(node);
+  components[node] = count;
 
   const neighbours = graph[node];
   for (const neighbour of neighbours) {
@@ -19,5 +22,16 @@ function dfs(node: string) {
   }
 }
 
-const start_node = "A";
-dfs(start_node);
+function findComponents() {
+  for (const node of Object.keys(graph)) {
+    if (!visited.has(node)) {
+      count++;
+      dfs(node);
+    }
+  }
+
+  return { count, components };
+}
+
+const result = findComponents();
+console.log(result);
